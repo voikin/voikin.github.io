@@ -19,6 +19,11 @@ document.onclick = (event) => {
 	} else if (type === 'to-copy') {
 		const node = event.target
 		copyToClipboard(node.textContent)
+		const copy = node.parentNode.querySelector('span')
+		copy.style.opacity = 1
+		setTimeout(() => {
+			copy.style.opacity = 0
+		}, 1500)
 	}
 }
 
@@ -37,6 +42,7 @@ const setRandomColors = (isInitial) => {
 		const isLocked = col.querySelector('button i').classList.contains('fa-lock')
 		const text = col.querySelector('h2')
 		const lock = col.querySelector('button i')
+		const copy = col.querySelector('span')
 		const color = isInitial 
             ? colors[idx] 
                 ? colors[idx]
@@ -50,7 +56,7 @@ const setRandomColors = (isInitial) => {
             colors.push(color)
         }
 		text.textContent = color
-		setTextColor(text, lock, color)
+		setTextColor(text, lock, color, copy)
 		col.style.backgroundColor = color
 	})
 	updateColorsHash(colors)
@@ -60,9 +66,9 @@ const copyToClipboard = (text) => {
 	return navigator.clipboard.writeText(text)
 }
 
-const setTextColor = (text, lock, color) => {
+const setTextColor = (text, lock, color, copy) => {
 	const lum = chroma(color).luminance()
-	text.style.color = lock.style.color = lum > 0.5 ? '#000' : '#fff'
+	text.style.color = copy.style.color = lock.style.color = lum > 0.5 ? '#000' : '#fff'
 }
 
 const updateColorsHash = (colors = []) => {
